@@ -8,6 +8,7 @@ use futures::compat::Future01CompatExt;
 use jsonrpc_core_client::transports::http;
 use log::*;
 use mysql_async::prelude::*;
+use mysql_async::{Pool, Opts};
 use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::message::Message as KafkaMessage;
 use rdkafka::producer::{FutureProducer, FutureRecord};
@@ -129,7 +130,8 @@ fn produce_job(producer: FutureProducer, topic: String, job: MiningJob) {
 
 fn execute_query(url: String, stmt: String) {
     spawn(async move {
-        let pool = mysql_async::Pool::new(url);
+        let opts = Opts::from_url(&url).expect("Invalid database URL");
+        let pool = Pool::new(opts);
         let delay = 5u64;
         for count in 0..5 {
             if count != 0 {
