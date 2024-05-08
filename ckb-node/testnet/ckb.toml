@@ -211,3 +211,12 @@ message = "0x"
 # db_port = 5432
 # db_user = "postgres"
 # db_password = "123456"
+
+[metrics.exporter.prometheus]
+target = { type = "prometheus", listen_address = "0.0.0.0:8100" }
+
+# # Experimental: Monitor memory changes.
+[memory_tracker]
+# # Seconds between checking the process, 0 is disable, default is 0.
+interval = 5
+
